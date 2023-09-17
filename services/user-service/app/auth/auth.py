@@ -1,4 +1,4 @@
-from .config import SECRET
+from config import SECRET
 import uuid
 from typing import Optional
 
@@ -10,8 +10,8 @@ from fastapi_users.authentication import (
     JWTStrategy,
 )
 from fastapi_users.db import SQLAlchemyUserDatabase
-from .database import User, get_user_db
-from .manager import get_user_manager
+from database.database import User, get_user_db
+from manager import get_user_manager
 
 
 cookie_transport = CookieTransport(cookie_name="bonds", cookie_max_age=3600)

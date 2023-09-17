@@ -1,2 +1,3 @@
 from .app import app
-__all__ = [app]
+from . import config
+__all__ = [app, config]

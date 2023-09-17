@@ -2,10 +2,10 @@
 from fastapi import FastAPI
 import logging
 from fastapi.logger import logger
-from auth.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
-from auth.database import DB_INITIALIZER, create_db_and_tables
+from config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
+from database.database import DB_INITIALIZER, create_db_and_tables
 from auth.auth import auth_backend, current_active_user, fastapi_users
-from auth.schemas import UserRead, UserCreate, UserUpdate
+from schemas.schemas import UserRead, UserCreate, UserUpdate
 
 
 logger.info('Initializing database...')

@@ -10,9 +10,9 @@ from fastapi_users.authentication import (
 )
 from fastapi_users.db import SQLAlchemyUserDatabase
 
-from .config import SECRET
+from config import SECRET
 
-from .database import User, get_user_db
+from database.database import User, get_user_db
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
