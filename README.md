@@ -104,3 +104,22 @@
 7. Управление спортивными площадками:
 8. Управление командами:
 9. Управление матчами:
+
+
+## Команды
+
+### Запуск проекта из корневой директории
+
+```bash
+sudo docker-compose -p spottier -f deploy/docker-compose.yaml up -d
+```
+
+### Остановка проекта из корневой директории
+```bash
+sudo docker-compose -p spottier -f deploy/docker-compose.yaml stop
+```
+
+### Статус сервисов
+```bash
+sudo docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+```
