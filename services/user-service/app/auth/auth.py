@@ -1,4 +1,3 @@
-from config import SECRET
 import uuid
 
 from fastapi_users import FastAPIUsers
@@ -7,10 +6,10 @@ from fastapi_users.authentication import (
     CookieTransport,
     JWTStrategy,
 )
-from database.database import User
-from manager import get_user_manager
+from ..database import User
+from ..manager import get_user_manager
 
-
+SECRET = 'SECRET'
 cookie_transport = CookieTransport(cookie_name="bonds", cookie_max_age=3600)
 
 

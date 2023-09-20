@@ -2,10 +2,10 @@
 from fastapi import FastAPI
 import logging
 from fastapi.logger import logger
-from config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
-from database.database import DB_INITIALIZER, create_db_and_tables
-from auth.auth import auth_backend, current_active_user, fastapi_users
-from schemas.schemas import UserRead, UserCreate, UserUpdate
+from .config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
+from .database import DB_INITIALIZER, create_db_and_tables
+from .auth import auth_backend, current_active_user, fastapi_users
+from .schemas import UserRead, UserCreate, UserUpdate
 
 
 logger.info('Initializing database...')
@@ -13,6 +13,11 @@ logger.info('Initializing database...')
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 SessionLocal = DB_INITIALIZER.init_database(DATABASE_URL)
+
+# TODO
+# Тут нужно подумать как модуль auth проиницизировать, по аналогии с DB_INITIALIZER
+# или переписать всю инициализацию через DI https://fastapi.tiangolo.com/tutorial/dependencies/ 
+# Модуль auth не должен знать, про config.py
 
 
 app = FastAPI(
