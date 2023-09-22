@@ -1,14 +1,12 @@
 from fastapi import FastAPI
-
+from .schemas import SpotCreate
+from . import crud
 
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    return {"2222":"1111"}
-
-
-@app.get("/app")
-async  def test():
-    return {f"{__name__}":test}
+@app.post("/spot", status_code=201, response_model=SpotCreate,
+    summary='Добавляет спортивную площадку в базу'
+)
+async def add_spot(spot:SpotCreate) -> SpotCreate:
+    return crud.create_spot(spot=spot)

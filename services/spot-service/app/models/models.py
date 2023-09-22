@@ -1,14 +1,13 @@
 from datetime import datetime
-from sqlalchemy import MetaData, Table, Column, String, Boolean, TIMESTAMP,UUID
+from sqlalchemy import Column, String,  UUID, JSON
+
+from ..database import Base
 
 
-metadata = MetaData()
-
-user = Table(
-    "spots",
-    metadata,
-    Column("id",UUID,nullable=False),
-    Column("name",String,nullable=False),
-    Column("desc",String,nullable=False),
-    Column("registered_at", TIMESTAMP, default=datetime.utcnow),
-)
+class Spot(Base):
+    __tablename__ = "spots"
+    id = Column("id",UUID, primary_key=True, index=True)
+    name = Column("name", String, nullable=False)
+    desc = Column("desc", String)
+    position = Column("position",JSON,nullable=False)
+    registered_at = Column("registered_at", default=datetime.utcnow)
