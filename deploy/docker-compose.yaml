@@ -1,7 +1,7 @@
 version: "3.0"
 services:
   db:
-    container_name: "db"
+    container_name: "userDB"
     image: postgres:14.1-alpine
     restart: always
     environment:
@@ -10,6 +10,18 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
+    networks:
+      - custom
+  spot-db:
+    container_name: "spotDB"
+    image: postgis/postgis:13-master
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5433:5432"
     networks:
       - custom
   user-service:
