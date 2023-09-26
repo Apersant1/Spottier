@@ -1,7 +1,6 @@
 version: "3.0"
 services:
-  db:
-    container_name: "userDB"
+  userDB:
     image: postgres:14.1-alpine
     restart: always
     environment:
@@ -10,10 +9,20 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
-    networks:
-      - custom
-  spot-db:
-    container_name: "spotDB"
+  user-service:
+    build:
+      context: ../services/user-service
+      dockerfile: ./DockerFile
+    environment:
+      - DB_HOST=userDB
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - SECRET=SECRET
+    ports:
+      - "5000:5000"
+  spotDB:
     image: postgis/postgis:13-master
     restart: always
     environment:
@@ -22,23 +31,15 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5433:5432"
-    networks:
-      - custom
-  user-service:
+  spot-service:
     build:
-      context: ../services/user-service
+      context: ../services/spot-service
       dockerfile: ./DockerFile
     environment:
-      - DB_HOST=db
+      - DB_HOST=spotDB
       - DB_PORT=5432
       - DB_NAME=postgres
       - DB_USER=postgres
       - DB_PASS=postgres
-      - SECRET=SECRET
     ports:
-      - "5000:5000"
-    networks:
-      - custom
-networks:
-  custom:
-    driver: bridge
+      - "5001:5001"

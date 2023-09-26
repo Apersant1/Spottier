@@ -6,9 +6,9 @@ class SpotBase(BaseModel):
     """
         Basic schemas for spot views
     """
-    name: str = Field(..., title='Name of sport playground',
+    name: str = Field(title='Name of sport playground',
                       max_length=40)
-    desc: str = Field(..., title='Description about place',
+    desc: str = Field(title='Description about place',
                       max_length=300)
     lat: float
     lon: float
