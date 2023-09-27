@@ -24,7 +24,12 @@ class SpotCreate(SpotBase):
 
 
 class SpotUpdate(SpotBase):
-    ...
+    name: str
+    desc: str
+    lat: float
+    lon: float
+    country: str
+    sport_type: Optional[str]
 
 
 class SpotDelete(SpotBase):

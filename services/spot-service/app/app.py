@@ -1,5 +1,7 @@
+import typing
+import uuid
 from fastapi import FastAPI, Depends
-
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from .schemas import SpotCreate
 from . import crud
@@ -31,6 +33,31 @@ def get_db():
 # endpoints
 
 
-@app.post("/spots", status_code=200, response_model=SpotBase, summary="Add new playground in App")
+@app.post("/spots", status_code=201, response_model=SpotBase, summary="Add new playground in App")
 async def add_spot(spot: SpotBase, db: Session = Depends(get_db)) -> SpotBase:
     return crud.create_spot(db=db, spot=spot)
+
+
+@app.get("/spots", status_code=201, response_model=list[SpotBase], summary="Get all spots from db")
+async def get_all_spots(db: Session = Depends(get_db)) -> typing.List[SpotBase]:
+    return crud.get_all_spot(db=db)
+
+
+@app.get("/spots/{spotId}", status_code=201, response_model=SpotBase, summary="Get spots one spot by id from db")
+async def get_spot_by_id(spotId: uuid.UUID, db: Session = Depends(get_db)) -> SpotBase:
+    return crud.get_spot(spotId=spotId, db=db)
+
+
+@app.patch("/spots/{spotId}", status_code=201, response_model=SpotUpdate, summary="Update spot info")
+async def update_spot(spotId: uuid.UUID, spot: SpotUpdate, db: Session = Depends(get_db)) -> SpotUpdate:
+    update_spot = crud.update_spot_fields(spotId=spotId, spot=spot, db=db)
+    if update_spot != None:
+        return update_spot
+    return JSONResponse(status_code=404, content={"message": "Item not found"})
+
+
+@app.delete("/spots/{spotId}", status_code=201, response_model=SpotDelete, summary="Remove spot from db")
+async def delete_spot(spotId: uuid.UUID, db: Session = Depends(get_db)) -> SpotDelete:
+    if crud.delete_spot(spotId, db):
+        return JSONResponse(status_code=200, content={"message": "Item successfully deleted"})
+    return JSONResponse(status_code=404, content={"message": "Item not found"})
