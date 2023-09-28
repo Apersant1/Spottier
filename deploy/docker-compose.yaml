@@ -9,6 +9,8 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
+    networks:
+      - custom
   user-service:
     build:
       context: ../services/user-service
@@ -22,6 +24,8 @@ services:
       - SECRET=SECRET
     ports:
       - "5000:5000"
+    networks:
+      - custom
   spotDB:
     image: postgis/postgis:13-master
     restart: always
@@ -31,6 +35,8 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5433:5432"
+    networks:
+      - custom
   spot-service:
     build:
       context: ../services/spot-service
@@ -43,3 +49,8 @@ services:
       - DB_PASS=postgres
     ports:
       - "5001:5001"
+    networks:
+      - custom
+networks:
+  custom:
+    driver: bridge
