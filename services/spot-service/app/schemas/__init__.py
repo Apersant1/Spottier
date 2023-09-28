@@ -1,2 +1,2 @@
-from .spot import SpotBase, SpotCreate, SpotDelete, SpotUpdate
-__all__ = [SpotBase, SpotCreate, SpotDelete, SpotUpdate]
+from .spot import SpotBase, SpotCreate, SpotDelete, SpotUpdate, SpotRead
+__all__ = [SpotBase, SpotCreate, SpotDelete, SpotUpdate, SpotRead]

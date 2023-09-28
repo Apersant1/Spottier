@@ -8,7 +8,7 @@ from . import crud
 from .config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 
 from .database import DB_INITIALIZER
-from .schemas import SpotBase, SpotCreate, SpotDelete, SpotUpdate
+from .schemas import SpotBase, SpotCreate, SpotDelete, SpotUpdate, SpotRead
 
 
 # connect to DB
@@ -30,16 +30,17 @@ def get_db():
     finally:
         db.close()
 
+
 # endpoints
 
 
-@app.post("/spots", status_code=201, response_model=SpotBase, summary="Add new playground in App")
-async def add_spot(spot: SpotBase, db: Session = Depends(get_db)) -> SpotBase:
+@app.post("/spots", status_code=201, response_model=SpotCreate, summary="Add new playground in App")
+async def add_spot(spot: SpotCreate, db: Session = Depends(get_db)) -> SpotCreate:
     return crud.create_spot(db=db, spot=spot)
 
 
-@app.get("/spots", status_code=201, response_model=list[SpotBase], summary="Get all spots from db")
-async def get_all_spots(db: Session = Depends(get_db)) -> typing.List[SpotBase]:
+@app.get("/spots", status_code=201, response_model=list[SpotRead], summary="Get all spots from db")
+async def get_all_spots(db: Session = Depends(get_db)) -> typing.List[SpotRead]:
     return crud.get_all_spot(db=db)
 
 

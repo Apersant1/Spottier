@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, UUID4
 from typing import Optional
 
 
@@ -19,8 +19,17 @@ class SpotBase(BaseModel):
         from_attributes = True
 
 
+class SpotRead(SpotBase):
+    id: UUID4
+
+
 class SpotCreate(SpotBase):
-    pass
+    name: str
+    desc: str
+    lat: float
+    lon: float
+    country: str
+    sport_type: Optional[str]
 
 
 class SpotUpdate(SpotBase):
