@@ -34,7 +34,7 @@ def get_db():
 # endpoints
 
 
-@app.post("/spots", status_code=201, response_model=SpotCreate, summary="Add new playground in App")
+@app.post("/spots", status_code=201, response_model=SpotRead, summary="Add new playground in App")
 async def add_spot(spot: SpotCreate, db: Session = Depends(get_db)) -> SpotCreate:
     return crud.create_spot(db=db, spot=spot)
 
@@ -44,12 +44,12 @@ async def get_all_spots(db: Session = Depends(get_db)) -> typing.List[SpotRead]:
     return crud.get_all_spot(db=db)
 
 
-@app.get("/spots/{spotId}", status_code=201, response_model=SpotBase, summary="Get spots one spot by id from db")
-async def get_spot_by_id(spotId: uuid.UUID, db: Session = Depends(get_db)) -> SpotBase:
+@app.get("/spots/{spotId}", status_code=201, response_model=SpotRead, summary="Get spots one spot by id from db")
+async def get_spot_by_id(spotId: uuid.UUID, db: Session = Depends(get_db)) -> SpotRead:
     return crud.get_spot(spotId=spotId, db=db)
 
 
-@app.patch("/spots/{spotId}", status_code=201, response_model=SpotUpdate, summary="Update spot info")
+@app.patch("/spots/{spotId}", status_code=201, response_model=SpotRead, summary="Update spot info")
 async def update_spot(spotId: uuid.UUID, spot: SpotUpdate, db: Session = Depends(get_db)) -> SpotUpdate:
     update_spot = crud.update_spot_fields(spotId=spotId, spot=spot, db=db)
     if update_spot != None:

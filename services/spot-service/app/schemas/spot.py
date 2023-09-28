@@ -21,6 +21,12 @@ class SpotBase(BaseModel):
 
 class SpotRead(SpotBase):
     id: UUID4
+    name: str
+    desc: str
+    lat: float
+    lon: float
+    country: str
+    sport_type: Optional[str]
 
 
 class SpotCreate(SpotBase):
