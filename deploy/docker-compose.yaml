@@ -42,11 +42,7 @@ services:
       context: ../services/spot-service
       dockerfile: ./DockerFile
     environment:
-      - DB_HOST=spotDB
-      - DB_PORT=5432
-      - DB_NAME=postgres
-      - DB_USER=postgres
-      - DB_PASS=postgres
+      - POSTGRES_DSN=postgresql://postgres:postgres@spotDB:5432/postgres
     ports:
       - "5001:5001"
     networks:

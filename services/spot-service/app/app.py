@@ -5,15 +5,15 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from .schemas import SpotCreate
 from . import crud
-from .config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
+from . import config 
 
 from .database import DB_INITIALIZER
 from .schemas import SpotBase, SpotCreate, SpotDelete, SpotUpdate, SpotRead
 
+cfg: config.Config = config.load_config()
 
 # connect to DB
-DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-SessionLocal = DB_INITIALIZER.init_database(DATABASE_URL)
+SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
 
 
 # init app
