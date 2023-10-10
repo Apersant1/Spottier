@@ -1,6 +1,7 @@
 from fastapi import FastAPI,Depends
 from sqlalchemy.orm import Session
 from .schemas import Match,MatchCreate,MatchRead
+from .models import Match
 from .database import DB_INITIALIZER
 from . import crud
 from . import config
@@ -27,6 +28,6 @@ async def add_spot(match: MatchCreate,db: Session = Depends(get_db)) -> MatchCre
     return crud.create_match(match=match,db=db)
 
 
-# @app.get("/matches",status_code=201,response_model=list[MatchRead], summary="get all matches")
-# async def get_matches():
-#     pass
+@app.get("/matches",status_code=201,response_model=list[MatchRead], summary="get all matches")
+async def get_matches(db:Session = Depends(get_db))-> list[MatchRead]:
+    return db.query(Match).all()
