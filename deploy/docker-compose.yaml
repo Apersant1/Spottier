@@ -47,6 +47,17 @@ services:
       - "5001:5001"
     networks:
       - custom
+  matchDB:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - custom
 networks:
   custom:
     driver: bridge
