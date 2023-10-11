@@ -1,1 +1,1 @@
-uvicorn "app:app" --port 5003 --reload
+uvicorn "app:app" --port 5002 --reload
