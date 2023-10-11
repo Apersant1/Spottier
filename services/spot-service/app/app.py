@@ -153,3 +153,17 @@ async def get_spots_radius(latitude: float, longitude: float,\
 
     """
     return crud.get_points_within_radius(latitude=latitude,longitude=longitude,radius=radius,db=db)
+
+@app.get("/nearest",tags=["geo"], status_code=201, summary="Find neares Spot around point")
+async def get_nearest_point(latitude: float, longitude: float,db:Session = Depends(get_db)):
+    """
+    Find the nearest Spot to the given latitude and longitude.
+
+    Args:
+        latitude (float): The latitude coordinate.
+        longitude (float): The longitude coordinate.
+
+    Returns:
+        JSONResponse: The JSON response containing the name, x, and y coordinates of the nearest spot.
+    """
+    return crud.find_nearest(latitude=latitude,longitude=longitude,db=db)

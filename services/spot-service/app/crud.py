@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from shapely.geometry import Point
 from geoalchemy2 import WKTElement
 from geoalchemy2.shape import to_shape
+from geoalchemy2 import functions as geofunc
 import folium
 from .models import Spot
 from .schemas import SpotCreate, SpotBase, SpotDelete, SpotUpdate
@@ -151,3 +152,28 @@ def get_points_within_radius(latitude: float, longitude: float, radius: float,db
         result.append({"name":point.name, "latitude": shapely_point.x, "longitude": shapely_point.y})
     
     return JSONResponse(status_code=201,content={"points": result})
+
+def find_nearest(latitude: float, longitude: float,db:Session):
+    """
+    Find the nearest Spot to the given latitude and longitude.
+
+    Args:
+        latitude (float): The latitude coordinate.
+        longitude (float): The longitude coordinate.
+        db (Session): The database session.
+
+    Returns:
+        JSONResponse: The JSON response containing the name, x, and y coordinates of the nearest spot.
+    """
+    shapely_point = Point(longitude, latitude)
+    wkt_point = WKTElement(shapely_point.wkt, srid=4326)
+    nearest = db.query(Spot)\
+        .order_by(geofunc.ST_Distance(Spot.wkb_geometry, wkt_point))\
+        .first()
+    if not nearest:
+        return JSONResponse(status_code=404, content={"message": "No nearest point found"})
+
+    shapely_point = to_shape(nearest.wkb_geometry)
+
+    return JSONResponse(status_code=201,\
+         content={"name": nearest.name, "x": shapely_point.x, "y": shapely_point.y})
