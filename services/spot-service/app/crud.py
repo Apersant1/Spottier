@@ -1,7 +1,10 @@
 import typing
 import uuid
-from .models import Spot
 from sqlalchemy.orm import Session
+from shapely.geometry import Point
+from geoalchemy2 import WKTElement
+from geoalchemy2.shape import to_shape
+from .models import Spot
 from .schemas import SpotCreate, SpotBase, SpotDelete, SpotUpdate
 
 
@@ -9,6 +12,10 @@ def create_spot(db: Session, spot: SpotCreate) -> SpotCreate:
     """ Create spot
     :rtype: SpotCreate
     """
+    shapely_point = Point(spot.lat, spot.lon)
+    wkt_point = WKTElement(shapely_point.wkt, srid=4326)
+
+
     db_spot = Spot(
         id=uuid.uuid4(),  # Generate a UUID for the id
         name=spot.name,
@@ -17,7 +24,7 @@ def create_spot(db: Session, spot: SpotCreate) -> SpotCreate:
         lon=spot.lon,
         country=spot.country,
         sport_type=spot.sport_type,
-        wkb_geometry=f'POINT({spot.lat} {spot.lon})'
+        wkb_geometry=wkt_point
     )
     db.add(db_spot)
     db.commit()

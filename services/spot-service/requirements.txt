@@ -23,6 +23,7 @@ pydantic-settings==2.0.3
 pydantic_core==2.6.3
 pylint==2.17.5
 python-dotenv==1.0.0
+shapely==2.0.1
 sniffio==1.3.0
 SQLAlchemy==2.0.21
 starlette==0.27.0
