@@ -27,3 +27,6 @@ class MatchRead(Match):
 
 class MatchCreate(Match):
     ...
+
+class MatchUpdate(Match):
+    ...

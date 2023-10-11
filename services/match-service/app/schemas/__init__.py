@@ -1,2 +1,2 @@
-from .schemas import Match,MatchRead,MatchCreate
-__all__ = [Match,MatchRead,MatchCreate]
+from .schemas import Match,MatchRead,MatchCreate,MatchUpdate
+__all__ = [Match,MatchRead,MatchCreate,MatchUpdate]
