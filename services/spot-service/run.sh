@@ -1,2 +1,2 @@
 
-uvicorn "app:app"  --port 8001
+uvicorn "app:app"  --port 8001 --reload
