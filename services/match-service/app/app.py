@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI,Depends
+from fastapi import FastAPI,Depends,Query
 from sqlalchemy.orm import Session
 from .schemas import Match,MatchCreate,MatchRead
 from .models import Match
@@ -30,8 +30,8 @@ async def add_spot(match: MatchCreate,db: Session = Depends(get_db)) -> MatchCre
 
 
 @app.get("/matches",status_code=201,response_model=list[MatchRead], summary="get all matches")
-async def get_all_matches(db:Session = Depends(get_db))-> list[MatchRead]:
-    return db.query(Match).all()
+async def get_all_matches(page: int = Query(1, ge=1), limit: int = Query(10, ge=1, le=100),db:Session = Depends(get_db))-> list[MatchRead]:
+    return db.query(Match).offset((page - 1) * limit).limit(limit).all()
 
 @app.get("/matches/{matchId}",status_code=201,response_model=MatchRead,summary="Get match by id")
 async def get_match(matchId:uuid.UUID, db:Session = Depends(get_db)) -> MatchRead:
