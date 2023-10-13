@@ -13,6 +13,7 @@
 - [Spottier](#spottier)
   - [Services](#services)
   - [API](#api)
+  - [Deploy](#deploy)
 
 <!-- /code_chunk_output -->
 
@@ -106,7 +107,7 @@
 10. Управление матчами:
 
 
-## Команды
+## Deploy
 
 ### Запуск проекта из корневой директории
 
