@@ -79,16 +79,16 @@ services:
       - "5435:5432"
     networks:
       - custom
-  # team-service:
-  #   build:
-  #     context: ../services/match-service
-  #     dockerfile: ./DockerFile
-  #   environment:
-  #     - POSTGRES_DSN=postgresql://postgres:postgres@matchDB:5432/postgres
-  #   ports:
-  #     - "5002:5002"
-  #   networks:
-  #     - custom
+  team-service:
+    build:
+      context: ../services/team-service
+      dockerfile: ./DockerFile
+    environment:
+      - POSTGRES_DSN=postgresql://postgres:postgres@teamDB:5432/postgres
+    ports:
+      - "5003:5003"
+    networks:
+      - custom
 networks:
   custom:
     driver: bridge
