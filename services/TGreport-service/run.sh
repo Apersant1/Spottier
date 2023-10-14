@@ -1,0 +1,1 @@
+uvicorn "app:app" --port 5005 --reload
