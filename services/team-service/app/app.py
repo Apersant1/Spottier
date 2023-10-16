@@ -2,8 +2,9 @@ import uuid
 from fastapi import FastAPI,Depends,status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from prometheus_fastapi_instrumentator import Instrumentator
+from prometheus_client import start_http_server
 from .schemas import TeamRead,TeamCreate,TeamUpdate
-
 from .database import DB_INITIALIZER
 from . import config
 from . import crud
@@ -25,7 +26,7 @@ def get_db():
 
 app = FastAPI(title="Team-service",version="0.1.0")
 
-
+Instrumentator().instrument(app).expose(app)
 
 @app.post('/teams',tags=["teams"],status_code=status.HTTP_201_CREATED,response_model=TeamRead)
 def create_team(team:TeamCreate,db:Session = Depends(get_db)) -> TeamCreate:
@@ -62,3 +63,4 @@ async def add_user_in_team(teamId:uuid.UUID,userId:uuid.UUID,db:Session = Depend
 @app.patch("/teams/{teamId}/delete-users/{userId}",tags=["teams"])
 async def delete_user_from_team(teamId:uuid.UUID,userId:uuid.UUID,db:Session = Depends(get_db)):
     return crud.delete_user_team(teamId=teamId,userId=userId,db=db)
+

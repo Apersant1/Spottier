@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'teamService'
+    static_configs:
+      - targets: ['team-service:5003']
+  - job_name: 'matchService'
+    static_configs:
+      - targets: ['match-service:5002']
+  - job_name: 'spotService'
+    static_configs:
+      - targets: ['spot-service:5001']
+  - job_name: 'userService'
+    static_configs:
+      - targets: ['user-service:5000']

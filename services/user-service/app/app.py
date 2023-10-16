@@ -2,7 +2,7 @@ import uuid
 
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
-
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.logger import logger
 from .config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER,SECRET
 from .database import DB_INITIALIZER, create_db_and_tables,User
@@ -36,6 +36,7 @@ app = FastAPI(
     title='User-Service'
 )
 
+Instrumentator().instrument(app).expose(app)
 
 app.include_router(
     fastapi_users.get_auth_router(auth.auth_backend), prefix="/auth/jwt", tags=["auth"]
