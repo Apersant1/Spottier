@@ -3,6 +3,7 @@ import uuid
 from fastapi import FastAPI, Depends
 from fastapi.responses import JSONResponse,HTMLResponse
 from sqlalchemy.orm import Session
+from prometheus_fastapi_instrumentator import Instrumentator
 from .schemas import SpotCreate
 from . import crud
 from . import config 
@@ -21,6 +22,8 @@ app = FastAPI(
     version="0.0.1",
     title="Spot-service"
 )
+
+Instrumentator().instrument(app).expose(app)
 
 
 def get_db():

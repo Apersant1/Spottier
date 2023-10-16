@@ -2,6 +2,7 @@ import uuid
 from fastapi import FastAPI, Depends, Query
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from prometheus_fastapi_instrumentator import Instrumentator
 from .schemas import Match, MatchCreate, MatchRead, MatchUpdate
 from .models import Match
 from .database import DB_INITIALIZER
@@ -15,6 +16,7 @@ SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
 
 app = FastAPI(title="Match-service")
 
+Instrumentator().instrument(app).expose(app)
 
 def get_db():
     db = SessionLocal()

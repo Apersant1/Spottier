@@ -89,6 +89,24 @@ services:
       - "5003:5003"
     networks:
       - custom
+    depends_on:
+      - teamDB
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus_data/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - custom
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    networks:
+      - custom
 networks:
   custom:
     driver: bridge
