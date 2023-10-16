@@ -1,0 +1,6 @@
+up:
+	sudo docker compose -p spottier -f deploy/docker-compose.yaml up -d
+down:
+	sudo docker compose -p spottier -f deploy/docker-compose.yaml stop
+status:
+	sudo docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
