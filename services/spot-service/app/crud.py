@@ -73,9 +73,19 @@ def update_spot_fields(spotId: uuid.UUID, spot: SpotUpdate, db: Session) -> Spot
     Returns:
     - SpotUpdate: A Spot object updating Spot by id in the database.
     """
+    shapely_point = Point(spot.lat, spot.lon)
+    wkt_point = WKTElement(shapely_point.wkt, srid=4326)
+
     result = db.query(Spot) \
         .filter(Spot.id == spotId) \
-        .update(spot.dict())
+        .update({
+            Spot.name : spot.name,
+            Spot.desc : spot.desc,
+            Spot.lat: spot.lat,
+            Spot.lon :spot.lon,
+            Spot.sport_type: spot.sport_type,
+            Spot.wkb_geometry : wkt_point
+        })
     db.commit()
 
     if result == 1:

@@ -68,6 +68,45 @@ services:
       - "5002:5002"
     networks:
       - custom
+  teamDB:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5435:5432"
+    networks:
+      - custom
+  team-service:
+    build:
+      context: ../services/team-service
+      dockerfile: ./DockerFile
+    environment:
+      - POSTGRES_DSN=postgresql://postgres:postgres@teamDB:5432/postgres
+    ports:
+      - "5003:5003"
+    networks:
+      - custom
+    depends_on:
+      - teamDB
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus_data/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - custom
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    networks:
+      - custom
 networks:
   custom:
     driver: bridge
