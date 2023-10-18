@@ -1,5 +1,7 @@
 up:
 	sudo docker compose -p spottier -f deploy/docker-compose.yaml up -d
+build:
+	sudo docker compose -p spottier -f deploy/docker-compose.yaml up -d --build
 down:
 	sudo docker compose -p spottier -f deploy/docker-compose.yaml stop
 status:

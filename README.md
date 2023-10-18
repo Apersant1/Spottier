@@ -119,18 +119,22 @@
 
 ## Deploy
 
-### Запуск проекта из корневой директории
-
+### Сборка и запуск проекта из корневой директории
 ```bash
-sudo docker-compose -p spottier -f deploy/docker-compose.yaml up -d
+make -f MakeFile build
+```
+
+### Запуск проекта из корневой директории
+```bash
+make -f MakeFile up
 ```
 
 ### Остановка проекта из корневой директории
 ```bash
-sudo docker-compose -p spottier -f deploy/docker-compose.yaml stop
+make -f MakeFile down
 ```
 
 ### Статус сервисов
 ```bash
-sudo docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+make -f MakeFile status
 ```
