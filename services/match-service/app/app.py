@@ -1,4 +1,6 @@
 import uuid
+import logging
+import logging_loki
 from fastapi import FastAPI, Depends, Query
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -10,6 +12,16 @@ from . import crud
 from . import config
 
 cfg: config.Config = config.load_config()
+
+MatchHandler = logging_loki.LokiHandler(
+    url=cfg.loki_dsn, 
+    tags={"application": "Match-service"},
+    version="1",
+)
+
+logger = logging.getLogger("MatchService")
+logger.setLevel(logging.INFO)
+logger.addHandler(MatchHandler)
 
 # connect to DB
 SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))

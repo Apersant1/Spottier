@@ -64,8 +64,9 @@ services:
       dockerfile: ./DockerFile
     environment:
       - POSTGRES_DSN=postgresql://postgres:postgres@matchDB:5432/postgres
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
     ports:
-      - "5002:5002"
+      - "5002:5002" 
     networks:
       - custom
   teamDB:
@@ -105,6 +106,23 @@ services:
       - 3000:3000
     depends_on:
       - prometheus
+    networks:
+      - custom
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - 3100:3100
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml -config.expand-env=true
+    networks:
+      - custom
+  promtail:
+    image: grafana/promtail:2.9.2
+    restart: always
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
     networks:
       - custom
 networks:
