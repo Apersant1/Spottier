@@ -1,5 +1,7 @@
 import typing
 import uuid
+import logging
+import logging_loki
 from fastapi import FastAPI, Depends
 from fastapi.responses import JSONResponse,HTMLResponse
 from sqlalchemy.orm import Session
@@ -13,9 +15,24 @@ from .schemas import SpotBase, SpotCreate, SpotDelete, SpotUpdate, SpotRead
 
 cfg: config.Config = config.load_config()
 
+SpotHandler = logging_loki.LokiHandler(
+    url=cfg.loki_dsn,
+    tags={"application": "Spot-service"},
+    version="1",
+)
+
+logger = logging.getLogger("SpotService")
+logger.setLevel(logging.INFO)
+logger.addHandler(SpotHandler)
+
 # connect to DB
 SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
 
+
+logger.info(
+    "Create session", 
+    extra={"tags": {"service": "Spot-service"}},
+)
 
 # init app
 app = FastAPI(

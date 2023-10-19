@@ -1,4 +1,6 @@
 import uuid
+import logging
+import logging_loki
 from fastapi import FastAPI,Depends,status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -11,7 +13,23 @@ from . import crud
 
 cfg : config.Config = config.load_config()
 
+TeamHandler = logging_loki.LokiHandler(
+    url=cfg.loki_dsn,
+    tags={"application": "Team-service"},
+    version="1",
+)
+
+
+logger = logging.getLogger("TeamService")
+logger.setLevel(logging.INFO)
+logger.addHandler(TeamHandler)
+
 SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
+
+logger.info(
+    "Create session", 
+    extra={"tags": {"service": "Team-service"}},
+)
 
 def get_db():
     """
