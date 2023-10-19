@@ -1,11 +1,29 @@
-from dotenv import load_dotenv
-import os
+from pydantic import Field,PostgresDsn
+from pydantic_settings import BaseSettings
 
-load_dotenv()
+class Config(BaseSettings):
+    postgres_dsn:PostgresDsn = Field(
+        default='postgresql://user:pass@localhost:5432/foobar',
+        env='POSTGRES_DSN',
+        alias='POSTGRES_DSN'
+    )
+    loki_dsn: str = Field(
+        default='http://loki:3100/loki/api/v1/push',
+        env='LOKI_URL',
+        alias='LOKI_URL'
+        
+    )
+    
+    SECRET: str = Field(
+        default='SECRET',
+        env='SECRET',
+        alias='SECRET'
+        
+    )
 
-DB_HOST = os.environ.get("DB_HOST")
-DB_PORT = 5432
-DB_NAME = os.environ.get("DB_NAME")
-DB_USER = os.environ.get("DB_USER")
-DB_PASS = os.environ.get("DB_PASS")
-SECRET = os.environ.get("SECRET")
+    class Config:
+        env_file = ".env"
+
+
+def load_config() -> Config:
+    return Config()

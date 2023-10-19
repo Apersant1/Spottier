@@ -10,14 +10,16 @@ from fastapi_users.authentication import (
 )
 from fastapi_users.db import SQLAlchemyUserDatabase
 
-from .config import SECRET
+from . import config
 
 from .database import User, get_user_db
 
 
+cfg : config.Config = config.load_config()
+
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    reset_password_token_secret = SECRET
-    verification_token_secret = SECRET
+    reset_password_token_secret = cfg.SECRET
+    verification_token_secret = cfg.SECRET
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")

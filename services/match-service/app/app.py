@@ -14,7 +14,7 @@ from . import config
 cfg: config.Config = config.load_config()
 
 MatchHandler = logging_loki.LokiHandler(
-    url=cfg.loki_dsn, 
+    url=cfg.loki_dsn,
     tags={"application": "Match-service"},
     version="1",
 )
@@ -25,7 +25,10 @@ logger.addHandler(MatchHandler)
 
 # connect to DB
 SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
-
+logger.info(
+    "Create session", 
+    extra={"tags": {"service": "Match-service"}},
+)
 app = FastAPI(title="Match-service")
 
 Instrumentator().instrument(app).expose(app)

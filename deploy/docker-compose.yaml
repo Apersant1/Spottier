@@ -16,12 +16,9 @@ services:
       context: ../services/user-service
       dockerfile: ./DockerFile
     environment:
-      - DB_HOST=userDB
-      - DB_PORT=5432
-      - DB_NAME=postgres
-      - DB_USER=postgres
-      - DB_PASS=postgres
       - SECRET=SECRET
+      - POSTGRES_DSN=postgresql+asyncpg://postgres:postgres@userDB:5432/postgres
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
     ports:
       - "5000:5000"
     networks:
@@ -43,6 +40,7 @@ services:
       dockerfile: ./DockerFile
     environment:
       - POSTGRES_DSN=postgresql://postgres:postgres@spotDB:5432/postgres
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
     ports:
       - "5001:5001"
     networks:
