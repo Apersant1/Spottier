@@ -11,7 +11,7 @@ class AuthInitializer():
         self.auth_backend = None
     def initializer(self,secret):
         self.secret_phrase = secret
-        self.cookie_transport = CookieTransport(cookie_name="bonds", cookie_max_age=3600)
+        self.cookie_transport = CookieTransport(cookie_name="bonds", cookie_max_age=3600,cookie_secure=False)
         self.auth_backend = AuthenticationBackend(
             name="jwt",
             transport=self.cookie_transport,

@@ -7,6 +7,12 @@ class Config(BaseSettings):
         env='POSTGRES_DSN',
         alias='POSTGRES_DSN'
     )
+    loki_dsn: str = Field(
+        default='http://loki:3100/loki/api/v1/push',
+        env='LOKI_URL',
+        alias='LOKI_URL'
+        
+    )
     class Config:
         env_file = ".env"
 

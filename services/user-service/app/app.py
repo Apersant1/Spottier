@@ -1,23 +1,39 @@
 import uuid
-
+import logging
+import logging_loki
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.logger import logger
-from .config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER,SECRET
+from . import config
 from .database import DB_INITIALIZER, create_db_and_tables,User
 from .auth import AuthInitializer
 from .schemas import UserRead, UserCreate, UserUpdate
 from .manager import get_user_manager
 
-logger.info('Initializing database...')
 
 
-DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-SessionLocal = DB_INITIALIZER.init_database(DATABASE_URL)
+cfg : config.Config = config.load_config()
 
+UserHandler = logging_loki.LokiHandler(
+    url=cfg.loki_dsn,
+    tags={"application": "User-service"},
+    version="1",
+)
+
+
+logger = logging.getLogger("UserService")
+logger.setLevel(logging.INFO)
+logger.addHandler(UserHandler)
+
+
+SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
+logger.info(
+    "Create session", 
+    extra={"tags": {"service": "User-service"}},
+)
 auth = AuthInitializer()
-auth.initializer(SECRET)
+auth.initializer(cfg.SECRET)
 
 
 fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth.auth_backend])
@@ -25,10 +41,6 @@ fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth.auth_backe
 current_active_user = fastapi_users.current_user(active=True)
 
 
-# TODO
-# Тут нужно подумать как модуль auth проиницизировать, по аналогии с DB_INITIALIZER
-# или переписать всю инициализацию через DI https://fastapi.tiangolo.com/tutorial/dependencies/ 
-# Модуль auth не должен знать, про config.py
 
 
 app = FastAPI(
