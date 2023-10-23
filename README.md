@@ -127,5 +127,3 @@ make -f MakeFile down
 ```bash
 make -f MakeFile status
 ```
-
-![Visualization of this repo](./diagram.svg)
