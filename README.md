@@ -86,24 +86,24 @@ To implement the service, you can use the following technologies and DBMS:
 4. Management of sports grounds:
       - `POST` **/spots** - creating a new site
       - `GET` **/spots** - Retrieving all sites
-      - `GET` **/spots{spotId}** - Retrieving specific sites
-      - `PATCH` **/spots{spotId}** - Site update
-      - `DELETE` **/spots{spotId}** - Deleting a site
+      - `GET` **/spots/{spotId}** - Retrieving specific sites
+      - `PATCH` **/spots/{spotId}** - Site update
+      - `DELETE` **/spots/{spotId}** - Deleting a site
 5. Team management:
       - `POST` **/teams** - creating a new team
       - `GET` **/teams** - Receive all teams
-      - `GET` **/teams{teamId}** - Receiving a team by id
-      - `PATCH` **/teams{teamId}** - Update match by id
-      - `DELETE` **/teams{teamId}** - Deleting a match by id
-      - `PATCH` **/teams{teamId}/add-users/{userId}** - Adding a user to a team
-      - `PATCH` **/teams{teamId}/delete-users/{userId}** - Deleting a user from a team
+      - `GET` **/teams/{teamId}** - Receiving a team by id
+      - `PATCH` **/teams/{teamId}** - Update match by id
+      - `DELETE` **/teams/{teamId}** - Deleting a match by id
+      - `PATCH` **/teams/{teamId}/add-users/{userId}** - Adding a user to a team
+      - `PATCH` **/teams/{teamId}/delete-users/{userId}** - Deleting a user from a team
 
 6. Match management:
       - `POST` **/matches** - creating a new match
       - `GET` **/matches** - Retrieving all matches
-      - `GET` **/matches{matchId}** - Getting a match by id
-      - `PATCH` **/matches{matchId}** - Update match by id
-      - `DELETE` **/matches{matchId}** - Deleting a match by id
+      - `GET` **/matches/{matchId}** - Getting a match by id
+      - `PATCH` **/matches/{matchId}** - Update match by id
+      - `DELETE` **/matches/{matchId}** - Deleting a match by id
 
 
 ## Deploy
