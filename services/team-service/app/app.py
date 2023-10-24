@@ -72,7 +72,7 @@ async def get_team_by_id(teamId:uuid.UUID,db:Session = Depends(get_db)):
 @app.patch("/teams/{teamId}",tags=["teams"],status_code=status.HTTP_200_OK,response_model=TeamRead)
 async def update_team_by_id(teamId:uuid.UUID,team:TeamUpdate,db:Session = Depends(get_db)):
     updated_team = crud.update_team(teamId=teamId,team=team,db=db)
-    if updated_team != None:
+    if updated_team is not None:
         return updated_team
     return JSONResponse(status_code=404, content={"message": "Team not found"})
 
