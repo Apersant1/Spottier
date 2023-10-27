@@ -1,5 +1,27 @@
 version: "3.0"
+
+volumes:
+  policy-enforcement-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./policy-enforcement-service
+
 services:
+  policy-enforcement-service:
+    build:
+      context: ../services/policy-service
+      dockerfile: ./DockerFile
+    ports:
+      - "4999:4999"
+    volumes:
+      - policy-enforcement-data:/mnt/
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      POLICIES_CONFIG_PATH: ${POLICIES_CONFIG_PATH}
+    networks:
+      - custom
   userDB:
     image: postgres:14.1-alpine
     restart: always
