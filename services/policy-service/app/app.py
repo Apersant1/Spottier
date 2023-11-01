@@ -4,7 +4,7 @@ from typing import Any, Dict
 import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, StreamingResponse
-
+from fastapi.middleware.cors import CORSMiddleware
 from app import config, schemes
 from app.polices.requestenforcer import EnforceResult, RequestEnforcer
 
@@ -32,7 +32,10 @@ class App(FastAPI):
 
 
 app = App()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*']
+)
 @app.api_route("/{path_name:path}", methods=["GET", "DELETE", "PATCH", "POST", "PUT", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
 async def catch_all(request: Request, path_name: str):
     enforce_result: EnforceResult = policy_checker.enforce(request)
