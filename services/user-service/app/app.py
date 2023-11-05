@@ -3,6 +3,7 @@ import logging
 import logging_loki
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
+from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.logger import logger
 from . import config
@@ -46,6 +47,10 @@ current_active_user = fastapi_users.current_user(active=True)
 app = FastAPI(
     version='0.0.1',
     title='User-Service'
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*']
 )
 
 Instrumentator().instrument(app).expose(app)

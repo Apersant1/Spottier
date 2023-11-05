@@ -1,129 +1,129 @@
 # Spottier
 
-Платформа для поиска спортивных площадок и матчей с использованием геоданных.
+A platform for searching sports grounds and matches using geodata.
 
-Описание:
-Сервис предоставляет возможность пользователям находить спортивные площадки и организовывать матчи по различным городам и странам.
-Основной фокус сервиса - работа с геоданными, которые позволяют пользователям выбирать интересующие их оборудованные площадки.
+Description:
+The service allows users to find sports grounds and organize matches in various cities and countries.
+The main focus of the service is working with geodata, which allows users to select equipped sites that interest them.
 
-Указатель:
+Pointer:
 
 <!-- code_chunk_output -->
 
 - [Spottier](#spottier)
-  - [Services](#services)
-  - [API](#api)
-  - [Deploy](#deploy)
+   - [Services](#services)
+   - [API](#api)
+   - [Deploy](#deploy)
 
 <!-- /code_chunk_output -->
 
-Функционал сервиса:
+Service functionality:
 
-- Регистрация и аутентификация пользователей: пользователи могут создавать аккаунты и входить в систему для использования сервиса.
+- User registration and authentication: Users can create accounts and log in to use the service.
   
-- Поиск площадок: пользователи могут искать площадки по по различным параметрам, таким как город, страна, тип мероприятия, длительность, стоимость и т.д.
+- Search for venues: users can search for venues by various parameters, such as city, country, event type, duration, cost, etc.
 
-- Просмотр информации о площадках и матчах которые на них проходили: пользователи могут просматривать подробную информацию, проведенные матчи ,включая описание.
+- Viewing information about the venues and the matches that took place on them: users can view detailed information about the matches held, including descriptions.
 
-- Создания матча: пользователи смогут создавать и регистрировать команды для участия в матчах, на любой спортивной площадки.
+- Match creation: users will be able to create and register teams to participate in matches on any sports field.
 
-- Работа с геоданными: сервис использует геоданные для отображения местоположения площадок на карте на карте, а также для предоставления дополнительной информации о спортивных площадках. Также проверенные платформой пользователи смогут сами добавлять игровые площадки.
+- Working with geodata: the service uses geodata to display the location of venues on a map on a map, as well as to provide additional information about sports grounds. Also, users verified by the platform will be able to add playgrounds themselves.
 
-Технологии и СУБД:
-Для реализации сервиса можно использовать следующие технологии и СУБД:
+Technologies and DBMS:
+To implement the service, you can use the following technologies and DBMS:
 
-- Фреймворк fastapi для разработки веб-приложения
-- База данных PostgreSQL для хранения информации о пользователях, площадок и матчей.
+- Fastapi framework for developing a web application
+- PostgreSQL database for storing information about users, venues and matches.
 
 ## Services
 
-1. Аутентификационный сервис (Authentication Service):
+1. Authentication Service:
 
-   - Отвечает за регистрацию и аутентификацию пользователей.
-   - Хранит информацию о пользователях в базе данных PostgreSQL.
-   - Обеспечивает генерацию и проверку токенов доступа для авторизации пользователей.
+    - Responsible for user registration and authentication.
+    - Stores user information in a PostgreSQL database.
+    - Provides generation and verification of access tokens for user authorization.
 
-2. Управление доступом (Access Management Service):
+2. Access Management Service:
 
-   - Отвечает за управление правами доступа пользователей
-   - Хранит информацию о правах доступа пользователей в базе данных PostgreSQL.
+    - Responsible for managing user access rights
+    - Stores information about user access rights in a PostgreSQL database.
 
-3. Сервис управления площадками (Venue Management Service):
+3. Venue Management Service:
 
-   - Отвечает за добавление, редактирование и удаление площадок.
-   - Хранит информацию о площадках в базе данных PostgreSQL.
+    - Responsible for adding, editing and deleting sites.
+    - Stores information about sites in a PostgreSQL database.
 
-4. Сервис управления матчами (Match Management Service):
+4. Match Management Service:
 
-   - Отвечает за создание, редактирование и удаление матчей.
-   - Хранит информацию о матчах в базе данных PostgreSQL.
+    - Responsible for creating, editing and deleting matches.
+    - Stores match information in a PostgreSQL database.
 
-5. Сервис управления командами (Match Management Service):
+5. Team management service (Match Management Service):
 
-   - Отвечает за создание, редактирование и удаление команд.
-   - Хранит информацию о командах в базе данных PostgreSQL.
+    - Responsible for creating, editing and deleting commands.
+    - Stores information about commands in a PostgreSQL database.
 
 
 
 
 ## API
 
-1. Регистрация и аутентификация пользователей:
-   - `POST` **/auth/register** - создание новой учетной записи пользователя
-   - `POST` **/auth/jwt/login** - вход пользователя в систему
-   - `POST` **/auth/jwt/logout** - выход пользователя из системы
-     </br>
-2. Управление доступом на базе пользователей и групп:
+1. User registration and authentication:
+    - `POST` **/auth/register** - creating a new user account
+    - `POST` **/auth/jwt/login** - user login
+    - `POST` **/auth/jwt/logout** - user logout
+      </br>
+2. Access control based on users and groups:
 
-   - `GET` **/users/me** - получение информации о текущем пользователе
-   - `GET` **/users/{id}** - получение информации о конкретном пользователе
-   - `PATCH` **/users/me** - обновление информации о текущем пользователе
-   - `PATCH` **/users/{id}** - обновление информации о конкретном пользователе (доступно только администраторам)
-   - `DELETE` **users/{id}** - удаление пользователя (доступно только администраторам)
-     </br>
+    - `GET` **/users/me** - getting information about the current user
+    - `GET` **/users/{id}** - obtaining information about a specific user
+    - `PATCH` **/users/me** - updating information about the current user
+    - `PATCH` **/users/{id}** - updating information about a specific user (available only to administrators)
+    - `DELETE` **users/{id}** - deleting a user (available only to administrators)
+      </br>
 
-3. Поиск и фильтрация:
-4. Управление спортивными площадками:
-     - `POST` **/spots** - создание новой площадки
-     - `GET` **/spots**  - Получение всех площадок
-     - `GET` **/spots{spotId}** - Получение конкретной площадок
-     - `PATCH` **/spots{spotId}** - Обновление площадки
-     - `DELETE` **/spots{spotId}** - Удаление площадки
-5. Управление командами:
-     - `POST` **/teams** - создание новой команды
-     - `GET` **/teams**  - Получение всех команд
-     - `GET` **/teams{teamId}** - Получение команды по id
-     - `PATCH` **/teams{teamId}** - Обновление  матча по id
-     - `DELETE` **/teams{teamId}** - Удаление  матча по id
-     - `PATCH` **/teams{teamId}/add-users/{userId}** - Добавление пользователя в команду
-     - `PATCH` **/teams{teamId}/delete-users/{userId}** - Удаление пользователя из команды
+3. Search and filtering:
+4. Management of sports grounds:
+      - `POST` **/spots** - creating a new site
+      - `GET` **/spots** - Retrieving all sites
+      - `GET` **/spots/{spotId}** - Retrieving specific sites
+      - `PATCH` **/spots/{spotId}** - Site update
+      - `DELETE` **/spots/{spotId}** - Deleting a site
+5. Team management:
+      - `POST` **/teams** - creating a new team
+      - `GET` **/teams** - Receive all teams
+      - `GET` **/teams/{teamId}** - Receiving a team by id
+      - `PATCH` **/teams/{teamId}** - Update match by id
+      - `DELETE` **/teams/{teamId}** - Deleting a match by id
+      - `PATCH` **/teams/{teamId}/add-users/{userId}** - Adding a user to a team
+      - `PATCH` **/teams/{teamId}/delete-users/{userId}** - Deleting a user from a team
 
-6. Управление матчами:
-     - `POST` **/matches** - создание нового матча
-     - `GET` **/matches**  - Получение всех матчей
-     - `GET` **/matches{matchId}** - Получение  матча по id
-     - `PATCH` **/matches{matchId}** - Обновление  матча по id
-     - `DELETE` **/matches{matchId}** - Удаление  матча по id
+6. Match management:
+      - `POST` **/matches** - creating a new match
+      - `GET` **/matches** - Retrieving all matches
+      - `GET` **/matches/{matchId}** - Getting a match by id
+      - `PATCH` **/matches/{matchId}** - Update match by id
+      - `DELETE` **/matches/{matchId}** - Deleting a match by id
 
 
 ## Deploy
 
-### Сборка и запуск проекта из корневой директории
+### Building and running the project from the root directory
 ```bash
 make -f MakeFile build
 ```
 
-### Запуск проекта из корневой директории
+### Running a project from the root directory
 ```bash
 make -f MakeFile up
 ```
 
-### Остановка проекта из корневой директории
+### Stopping a project from the root directory
 ```bash
 make -f MakeFile down
 ```
 
-### Статус сервисов
+###Service status
 ```bash
 make -f MakeFile status
 ```

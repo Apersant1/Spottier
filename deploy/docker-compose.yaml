@@ -1,5 +1,27 @@
 version: "3.0"
+
+volumes:
+  policy-enforcement-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./policy-enforcement-service
+
 services:
+  policy-enforcement-service:
+    build:
+      context: ../services/policy-service
+      dockerfile: ./DockerFile
+    ports:
+      - "4999:4999"
+    volumes:
+      - policy-enforcement-data:/mnt/
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      POLICIES_CONFIG_PATH: ${POLICIES_CONFIG_PATH}
+    networks:
+      - custom
   userDB:
     image: postgres:14.1-alpine
     restart: always
@@ -16,11 +38,13 @@ services:
       context: ../services/user-service
       dockerfile: ./DockerFile
     environment:
-      - SECRET=SECRET
-      - POSTGRES_DSN=postgresql+asyncpg://postgres:postgres@userDB:5432/postgres
-      - LOKI_URL=http://loki:3100/loki/api/v1/push
+      SECRET: ${JWT_SECRET}
+      POSTGRES_DSN: ${POSTGRES_DSN_ASYNC_USER}
+      LOKI_URL: ${LOKI_URL}
     ports:
       - "5000:5000"
+    depends_on:
+      - userDB
     networks:
       - custom
   spotDB:
@@ -43,6 +67,8 @@ services:
       - LOKI_URL=http://loki:3100/loki/api/v1/push
     ports:
       - "5001:5001"
+    depends_on:
+      - spotDB
     networks:
       - custom
   matchDB:
@@ -65,6 +91,8 @@ services:
       - LOKI_URL=http://loki:3100/loki/api/v1/push
     ports:
       - "5002:5002" 
+    depends_on:
+      - matchDB
     networks:
       - custom
   teamDB:
