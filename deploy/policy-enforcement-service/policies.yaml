@@ -1,0 +1,87 @@
+services:
+    - name: user-service
+      entrypoint: http://user-service:5000/
+    - name: spot-service
+      entrypoint: http://spot-service:5001/
+      inject_token_in_swagger: True
+    - name: match-service
+      entrypoint: http://match-service:5002/
+      inject_token_in_swagger: True
+    - name: team-service
+      entrypoint: http://team-service:5003/
+      inject_token_in_swagger: True
+
+model: |
+    [request_definition]
+    r = sub, obj, act
+    
+    [policy_definition]
+    p = sub_rule, obj, act
+    
+    [policy_effect]
+    e = some(where (p.eft == allow))
+    
+    [matchers]
+    m = eval(p.sub_rule) && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)
+policies:
+    - service: user-service
+      resource: /auth/*
+      methods: POST
+      white_list: true
+    - service: user-service
+      resource: /users/*
+      methods: GET
+      rule: r.sub.is_superuser == False
+    - service: user-service
+      resource: /users/*
+      methods: (GET)|(POST)|(PATCH)|(DELETE)
+      rule: r.sub.is_superuser == True
+    - service: spot-service
+      rule: r.sub.is_superuser == False
+      resource: /spots
+      methods: GET
+    - service: spot-service
+      rule: r.sub.is_superuser == False
+      resource: /spots/*
+      methods: GET
+    - service: spot-service
+      rule: r.sub.is_superuser == True
+      resource: /spots
+      methods: (GET)|(POST)
+    - service: spot-service
+      rule: r.sub.is_superuser == True
+      resource: /spots/*
+      methods: (GET)|(POST)|(PATCH)|(DELETE)
+    - service: match-service
+      rule: r.sub.is_superuser == False
+      resource: /matches
+      methods: (GET)|(POST)
+    - service: match-service
+      rule: r.sub.is_superuser == False
+      resource: /matches/*
+      methods: (GET)|(POST)|(PATCH)
+    - service: match-service
+      rule: r.sub.is_superuser == True
+      resource: /matches
+      methods: (GET)|(POST)
+    - service: match-service
+      rule: r.sub.is_superuser == True
+      resource: /matches/*
+      methods: (GET)|(POST)|(PATCH)|(DELETE)
+    - service: team-service
+      rule: r.sub.is_superuser == False
+      resource: /teams
+      methods: (GET)|(POST)
+    - service: team-service
+      rule: r.sub.is_superuser == False
+      resource: /teams/*
+      methods: (GET)|(POST)|(PATCH)|(DELETE)
+    - service: team-service
+      rule: r.sub.is_superuser == True
+      resource: /teams
+      methods: (GET)|(POST)
+    - service: team-service
+      rule: r.sub.is_superuser == True
+      resource: /teams/*
+      methods: (GET)|(POST)|(PATCH)|(DELETE)
+

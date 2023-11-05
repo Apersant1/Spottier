@@ -2,6 +2,7 @@ import uuid
 import logging
 import logging_loki
 from fastapi import FastAPI, Depends, Query,status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -30,6 +31,13 @@ logger.info(
     extra={"tags": {"service": "Match-service"}},
 )
 app = FastAPI(title="Match-service")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
+)
 
 Instrumentator().instrument(app).expose(app)
 
