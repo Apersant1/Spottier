@@ -2,6 +2,7 @@ import uuid
 import logging
 import logging_loki
 from fastapi import FastAPI,Depends,status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -43,6 +44,13 @@ def get_db():
 
 
 app = FastAPI(title="Team-service",version="0.1.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
+)
 
 Instrumentator().instrument(app).expose(app)
 

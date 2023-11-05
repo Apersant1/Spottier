@@ -34,7 +34,10 @@ class App(FastAPI):
 app = App()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*']
+    allow_origins=["*"], # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
 )
 @app.api_route("/{path_name:path}", methods=["GET", "DELETE", "PATCH", "POST", "PUT", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
 async def catch_all(request: Request, path_name: str):
