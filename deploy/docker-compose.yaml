@@ -123,8 +123,16 @@ services:
     build:
       context: ../services/notify-service
       dockerfile: ./DockerFile
+    environment:
+      TOKEN_BOT: ${TOKEN_BOT}
+      CHAT_ID : ${CHAT_ID}
+      AMQP_URL: ${AMQP_URL}
     networks:
       - custom
+
+  
+  
+  
   prometheus:
     image: prom/prometheus
     ports:
