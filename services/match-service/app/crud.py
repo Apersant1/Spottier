@@ -1,8 +1,17 @@
+import json
+import pika
 import uuid
 from .models import Match
 from sqlalchemy.orm import Session
 from .schemas import MatchCreate,MatchUpdate
 import datetime
+from . import config
+from dataclasses import asdict
+
+cfg: config.Config = config.load_config()
+
+
+
 
 def create_match(match: MatchCreate,db:Session) -> MatchCreate:
     db_match = Match(
@@ -19,7 +28,19 @@ def create_match(match: MatchCreate,db:Session) -> MatchCreate:
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
+    params = pika.URLParameters(cfg.cloud_amqp)
+    connection = pika.BlockingConnection(params)
+    channel = connection.channel()
+    channel.queue_declare(queue='matches_queue')
+    message = f"{match.spot_id}:{match.team_first_id}:{match.team_second_id}"
+    channel.basic_publish(exchange='', routing_key='matches_queue', body=message)
+    connection.close()
     return db_match
+
+
+def get_all_match(page:int,limit:int,db:Session):
+    return db.query(Match).offset((page - 1) * limit).limit(limit).all()
+
 
 def get_match(matchId:uuid.UUID,db:Session):
     return db.query(Match).filter(Match.id == matchId).first()

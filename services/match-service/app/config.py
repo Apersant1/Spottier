@@ -13,6 +13,12 @@ class Config(BaseSettings):
         alias='LOKI_URL'
         
     )
+    cloud_amqp: str = Field(
+        default='amqps:/amqps:3100/amqps/amqps/v1/amqps',
+        env='CLOUD_AMQP',
+        alias='CLOUD_AMQP'
+        
+    )
     class Config:
         env_file = ".env"
 

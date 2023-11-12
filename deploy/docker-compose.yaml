@@ -89,6 +89,7 @@ services:
     environment:
       - POSTGRES_DSN=postgresql://postgres:postgres@matchDB:5432/postgres
       - LOKI_URL=http://loki:3100/loki/api/v1/push
+      - CLOUD_AMQP=amqps://fmnyttgp:gpgbJ-PjnJiFP9cnXg6ih1OC3yBXBBOS@shrimp.rmq.cloudamqp.com/fmnyttgp
     ports:
       - "5002:5002" 
     depends_on:
@@ -118,6 +119,12 @@ services:
       - custom
     depends_on:
       - teamDB
+  notify-service:
+    build:
+      context: ../services/notify-service
+      dockerfile: ./DockerFile
+    networks:
+      - custom
   prometheus:
     image: prom/prometheus
     ports:
