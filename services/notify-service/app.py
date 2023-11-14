@@ -17,9 +17,9 @@ class Config(BaseSettings):
         
     )
     amqp_url: str = Field(
-        default='',
-        env='AMQP_URL',
-        alias='AMQP_URL'
+        default='amqp://guest:guest@localhost/',
+        env='AMQP',
+        alias='AMQP'
         
     )
     class Config:
@@ -34,10 +34,11 @@ cfg : Config = load_config()
 
 token_bot = cfg.token_bot
 chat_id = cfg.chat_id
-amqp_url = cfg.amqp_url
+
+
 # Set up connection to RabbitMQ
 async def consume_from_queue():
-    connection = await aio_pika.connect_robust(amqp_url)
+    connection = await aio_pika.connect_robust(cfg.amqp_url)
     channel = await connection.channel()
 
     # Declare the queue
