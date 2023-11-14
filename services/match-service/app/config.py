@@ -13,6 +13,12 @@ class Config(BaseSettings):
         alias='LOKI_URL'
         
     )
+    amqp: str = Field(
+        default='amqp://guest:guest@localhost/',
+        env='AMQP',
+        alias='AMQP'
+        
+    )
     class Config:
         env_file = ".env"
 
