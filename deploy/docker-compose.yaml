@@ -87,8 +87,9 @@ services:
       context: ../services/match-service
       dockerfile: ./DockerFile
     environment:
-      - POSTGRES_DSN=postgresql://postgres:postgres@matchDB:5432/postgres
-      - LOKI_URL=http://loki:3100/loki/api/v1/push
+        POSTGRES_DSN: ${MATCH_DB_DSN}
+        LOKI_URL: ${LOKI_URL}
+        AMQP: ${AMQP}
     ports:
       - "5002:5002" 
     depends_on:
@@ -118,6 +119,25 @@ services:
       - custom
     depends_on:
       - teamDB
+  notify-service:
+    build:
+      context: ../services/notify-service
+      dockerfile: ./DockerFile
+    environment:
+      TOKEN_BOT: ${TOKEN_BOT}
+      CHAT_ID : ${CHAT_ID}
+      AMQP: ${AMQP}
+    networks:
+      - custom
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.12.8-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - custom
   prometheus:
     image: prom/prometheus
     ports:

@@ -24,6 +24,7 @@ logger = logging.getLogger("MatchService")
 logger.setLevel(logging.INFO)
 logger.addHandler(MatchHandler)
 
+
 # connect to DB
 SessionLocal = DB_INITIALIZER.init_database(str(cfg.postgres_dsn))
 logger.info(
@@ -58,7 +59,7 @@ async def add_spot(match: MatchCreate, db: Session = Depends(get_db)) -> MatchCr
 
 @app.get("/matches", tags=["matches"],status_code=201, response_model=list[MatchRead], summary="get all matches")
 async def get_all_matches(page: int = Query(1, ge=1), limit: int = Query(10, ge=1, le=100), db: Session = Depends(get_db)) -> list[MatchRead]:
-    all_matches = db.query(Match).offset((page - 1) * limit).limit(limit).all()
+    all_matches = crud.get_all_match(page=page,limit=limit,db=db)
     if all_matches is not None:
         return all_matches
     return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,\
@@ -85,3 +86,5 @@ async def delete_match(matchId: uuid.UUID, db: Session = Depends(get_db)) -> Mat
     if crud.delete_match(matchId, db):
         return JSONResponse(status_code=200, content={"message": "Match successfully deleted"})
     return JSONResponse(status_code=404, content={"message": "Match not found"})
+
+
