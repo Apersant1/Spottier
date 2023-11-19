@@ -6,14 +6,16 @@ Description:
 The service allows users to find sports grounds and organize matches in various cities and countries.
 The main focus of the service is working with geodata, which allows users to select equipped sites that interest them.
 
-Pointer:
-
+Table of Contents:
 <!-- code_chunk_output -->
 
 - [Spottier](#spottier)
-   - [Services](#services)
-   - [API](#api)
-   - [Deploy](#deploy)
+    - [Services](#services)
+    - [API](#api)
+    - [Deploy](#deploy)
+    - [Metrics](#metrics)
+    - [Vizualizate](#vizualizate)
+    - [Tests](services/user-service/README.md)
 
 <!-- /code_chunk_output -->
 
@@ -82,7 +84,7 @@ To implement the service, you can use the following technologies and DBMS:
     - `DELETE` **users/{id}** - deleting a user (available only to administrators)
       </br>
 
-3. Search and filtering:
+3. Search and filtering: soon)
 4. Management of sports grounds:
       - `POST` **/spots** - creating a new site
       - `GET` **/spots** - Retrieving all sites
@@ -123,7 +125,14 @@ make -f MakeFile up
 make -f MakeFile down
 ```
 
-###Service status
+### Service status
 ```bash
 make -f MakeFile status
 ```
+## Metrics
+
+To view metrics from across all microservices, go to `localhost:9090`
+
+
+## Vizualizate
+Use `localhost:3000` to connect Grafana and see the full life of Spottier.
