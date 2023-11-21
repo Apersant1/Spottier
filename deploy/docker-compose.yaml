@@ -186,6 +186,7 @@ services:
       && python -m unittest /mnt/test.py"
     depends_on:
       - policy-enforcement-service
+      - team-service
     networks:
       - custom
 networks:

@@ -16,6 +16,7 @@ Table of Contents:
     - [Metrics](#metrics)
     - [Vizualizate](#vizualizate)
     - [Tests](services/user-service/README.md)
+    - [Notifications](services/notify-service/README.md)
 
 <!-- /code_chunk_output -->
 
