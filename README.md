@@ -1,12 +1,20 @@
-# Spottier
+<div align="center" id="top"> 
+  <img align="center" src="./docs/images/svgexport-55.svg" alt="Spottier logo" />
 
+</div>
+
+
+
+<h1 align="center">Spottier</h1>
+<p>
 A platform for searching sports grounds and matches using geodata.
 
 Description:
 The service allows users to find sports grounds and organize matches in various cities and countries.
 The main focus of the service is working with geodata, which allows users to select equipped sites that interest them.
+<p>
 
-Table of Contents:
+<h3>Table of Contents:</h3>
 <!-- code_chunk_output -->
 
 - [Spottier](#spottier)
@@ -16,7 +24,7 @@ Table of Contents:
     - [Metrics](#metrics)
     - [Vizualizate](#vizualizate)
     - [Tests](services/user-service/README.md)
-    - [Notifications](services/notify-service/README.md)
+    - [⚠️ Notifications](services/notify-service/README.md)
 
 <!-- /code_chunk_output -->
 
