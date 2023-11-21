@@ -1,5 +1,3 @@
-Certainly! Here's an example of a README file that explains how to use the code you provided:
-
 # RabbitMQ to Telegram Consumer
 
 This is a Python script that consumes messages from a RabbitMQ queue and sends them to a Telegram chat using the `aio_pika` and `python-telegram-bot` libraries.
