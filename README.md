@@ -24,7 +24,7 @@ The main focus of the service is working with geodata, which allows users to sel
     - [Metrics](#metrics)
     - [Vizualizate](#vizualizate)
     - [Tests](services/user-service/README.md)
-    - [⚠️ Notifications](services/notify-service/README.md)
+    - [Notifications](services/notify-service/README.md)
 
 <!-- /code_chunk_output -->
 
@@ -117,6 +117,10 @@ To implement the service, you can use the following technologies and DBMS:
       - `DELETE` **/matches/{matchId}** - Deleting a match by id
 
 
+## Before deploy
+  ⚠️⚠️⚠️  Before building the project, you must add the required keys to the <a href="./services/notify-service/README.md">Notifications</a> service
+
+  
 ## Deploy
 
 ### Building and running the project from the root directory
