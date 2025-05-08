@@ -26,8 +26,11 @@ class App(FastAPI):
         scheme_builder = schemes.SchemeBuilder(super().openapi())
 
         for target in policy_checker.services:
-            resp = httpx.get(target.openapi_scheme)
-            scheme_builder.append(resp.json(), inject_token_in_swagger=target.inject_token_in_swagger)
+            try:
+                resp = httpx.get(target.openapi_scheme, timeout=3.0)
+                scheme_builder.append(resp.json(), inject_token_in_swagger=target.inject_token_in_swagger)
+            except httpx.RequestError as e:
+                logger.warning(f"Could not load OpenAPI from {target.openapi_scheme}: {e}")
         return scheme_builder.result
 
 

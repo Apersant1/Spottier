@@ -15,19 +15,6 @@ volumes:
       device: ./e2e
 
 services:
-  policy-enforcement-service:
-    build:
-      context: ../services/policy-service
-      dockerfile: ./DockerFile
-    ports:
-      - "4999:4999"
-    volumes:
-      - policy-enforcement-data:/mnt/
-    environment:
-      JWT_SECRET: ${JWT_SECRET}
-      POLICIES_CONFIG_PATH: ${POLICIES_CONFIG_PATH}
-    networks:
-      - custom
   userDB:
     image: postgres:14.1-alpine
     restart: always
@@ -93,11 +80,11 @@ services:
       context: ../services/match-service
       dockerfile: ./DockerFile
     environment:
-        POSTGRES_DSN: ${MATCH_DB_DSN}
-        LOKI_URL: ${LOKI_URL}
-        AMQP: ${AMQP}
+      POSTGRES_DSN: ${MATCH_DB_DSN}
+      LOKI_URL: ${LOKI_URL}
+      AMQP: ${AMQP}
     ports:
-      - "5002:5002" 
+      - "5002:5002"
     depends_on:
       - matchDB
     networks:
@@ -131,12 +118,31 @@ services:
       dockerfile: ./DockerFile
     environment:
       TOKEN_BOT: ${TOKEN_BOT}
-      CHAT_ID : ${CHAT_ID}
+      CHAT_ID: ${CHAT_ID}
       AMQP: ${AMQP}
     networks:
       - custom
     depends_on:
       - rabbitmq
+  policy-enforcement-service:
+    build:
+      context: ../services/policy-service
+      dockerfile: ./DockerFile
+    ports:
+      - "4999:4999"
+    depends_on:
+      - user-service
+      - spot-service
+      - match-service
+      - team-service
+      - notify-service
+    volumes:
+      - policy-enforcement-data:/mnt/
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      POLICIES_CONFIG_PATH: ${POLICIES_CONFIG_PATH}
+    networks:
+      - custom
   rabbitmq:
     image: rabbitmq:3.12.8-management-alpine
     ports:
@@ -175,6 +181,14 @@ services:
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
+    networks:
+      - custom
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8080:8080
     networks:
       - custom
   test-runner:
