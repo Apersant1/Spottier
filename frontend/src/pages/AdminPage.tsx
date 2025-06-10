@@ -19,6 +19,7 @@ const AdminPage = observer(() => {
     description: "",
   });
   const [editingId, setEditingId] = useState<string | null>(null);
+  console.log("qwe");
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
