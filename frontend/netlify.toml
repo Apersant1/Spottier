@@ -1,0 +1,14 @@
+[cli]
+  packageManager = "yarn"
+
+[build]
+  command   = "yarn install && yarn build"
+  publish   = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[redirects]]
+  from    = "/*"
+  to      = "/index.html"
+  status  = 200

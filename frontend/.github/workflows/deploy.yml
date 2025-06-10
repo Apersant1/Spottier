@@ -1,0 +1,62 @@
+name: Build and Deploy Frontend
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build project
+        run: yarn build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  deploy:
+    name: Deploy to server
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Add remote host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 45.83.20.56 >> ~/.ssh/known_hosts
+
+      - name: Upload build via SCP
+        run: |
+          scp -r dist/* ${{ secrets.SERVER_ADDRESS}}:${{ secrets.SSH_DIR }}
+
+      - name: Restart Nginx container
+        run: |
+          ssh ${{ secrets.SERVER_ADDRESS }} "systemctl restart nginx"

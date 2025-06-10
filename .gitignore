@@ -31,3 +31,5 @@ archive.zip
 
 # Alembic
 **/**/alembic/**/*.*
+frontend/node_modules/
+frontend/.env
