@@ -90,7 +90,7 @@ const RegisterPage = () => {
             name="username"
             value={user.username}
             onChange={handleChange}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             required
             whileFocus={{ scale: 1.02 }}
           />
@@ -109,7 +109,7 @@ const RegisterPage = () => {
             name="email"
             value={user.email}
             onChange={handleChange}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             required
             whileFocus={{ scale: 1.02 }}
           />
@@ -131,7 +131,7 @@ const RegisterPage = () => {
             name="password"
             value={user.password}
             onChange={handleChange}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             required
             whileFocus={{ scale: 1.02 }}
           />
@@ -140,81 +140,10 @@ const RegisterPage = () => {
           )}
         </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="gender"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Пол
-          </label>
-          <motion.select
-            id="gender"
-            name="gender"
-            value={user.gender.toString()}
-            onChange={handleChange}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            whileFocus={{ scale: 1.02 }}
-          >
-            <option value="true">Мужчина</option>
-            <option value="false">Женщина</option>
-          </motion.select>
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="age"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Возраст
-          </label>
-          <motion.input
-            id="age"
-            type="number"
-            name="age"
-            value={user.age}
-            onChange={handleChange}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            whileFocus={{ scale: 1.02 }}
-          />
-          {formErrors.age && (
-            <p className="text-red-500 text-sm">{formErrors.age}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="time_zone"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Time Zone
-          </label>
-          <motion.select
-            id="time_zone"
-            name="time_zone"
-            value={user.time_zone}
-            onChange={handleChange}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            whileFocus={{ scale: 1.02 }}
-          >
-            {Array.from({ length: 27 }, (_, i) => {
-              const offset = i - 12;
-              const label =
-                offset >= 0
-                  ? `UTC+${offset === 0 ? "" : offset}`
-                  : `UTC${offset}`;
-              return (
-                <option key={offset} value={offset}>
-                  {label}
-                </option>
-              );
-            })}
-          </motion.select>
-        </div>
-
         <motion.button
           type="button"
           onClick={handleRegister}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
           whileHover={{ scale: 1.05 }}
         >
           Зарегистрироваться

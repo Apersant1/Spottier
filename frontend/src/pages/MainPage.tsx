@@ -10,9 +10,7 @@ import {
   faMapMarkedAlt,
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { SizeProp } from "@fortawesome/fontawesome-svg-core";
 import { observer } from "mobx-react-lite";
-import { match } from "assert";
 
 const statsData = [
   { label: "Всего сообщений", value: 123, icon: faComments },
@@ -100,7 +98,6 @@ const StatsCarousel: React.FC = () => {
 };
 
 const MainPage: React.FC = () => {
-  const { teamsStore, matchesStore } = useStores();
   return (
     <div className="w-screen mx-auto p-4 sm:p-6 font-orbitron bg-gray-900 min-h-screen text-white">
       <div className="flex gap-3 items-center mb-8 sm:mb-12">
@@ -127,56 +124,12 @@ const MainPage: React.FC = () => {
   );
 };
 
-const TeamManagement: React.FC = () => (
-  <section className="bg-orange-500 p-4 rounded-xl shadow-lg select-none">
-    <h3 className="text-xl mb-3 font-semibold text-white">Команды</h3>
-    <ul className="list-none p-0 text-white text-base">
-      <li className="mb-3 flex items-center">
-        Команда 1
-        <button
-          className="ml-3 bg-white text-orange-600 rounded-md px-3 py-1 text-sm font-semibold
-                           hover:bg-orange-100 transition"
-        >
-          Редактировать
-        </button>
-        <button
-          className="ml-2 bg-white text-orange-600 rounded-md px-3 py-1 text-sm font-semibold
-                           hover:bg-orange-100 transition"
-        >
-          Удалить
-        </button>
-      </li>
-      <li className="mb-3 flex items-center">
-        Команда 2
-        <button
-          className="ml-3 bg-white text-orange-600 rounded-md px-3 py-1 text-sm font-semibold
-                           hover:bg-orange-100 transition"
-        >
-          Редактировать
-        </button>
-        <button
-          className="ml-2 bg-white text-orange-600 rounded-md px-3 py-1 text-sm font-semibold
-                           hover:bg-orange-100 transition"
-        >
-          Удалить
-        </button>
-      </li>
-    </ul>
-    <button
-      className="mt-4 bg-white text-orange-600 rounded-lg px-5 py-2 font-bold
-                       hover:bg-orange-100 transition"
-    >
-      Добавить команду
-    </button>
-  </section>
-);
-
 const UpcomingMatches: React.FC = observer(() => {
   const { matchesStore, teamsStore } = useStores();
   useEffect(() => {
     matchesStore.fetchMatches();
     teamsStore.FetchTeams();
-  });
+  }, [teamsStore.currentTeam]);
   const getTeamName = (id: string) =>
     teamsStore.teams.find((t) => t.id === id)?.name || "Неизвестная команда";
 
@@ -188,13 +141,6 @@ const UpcomingMatches: React.FC = observer(() => {
           <li key={index}>
             {getTeamName(match.team_first_id)} vs{" "}
             {getTeamName(match.team_second_id)} —{" "}
-            {new Date(match.registered_at).toLocaleString("ru-RU", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
           </li>
         ))}
       </ul>
@@ -202,22 +148,42 @@ const UpcomingMatches: React.FC = observer(() => {
   );
 });
 
-const SportsFacilities: React.FC = () => (
-  <section className="bg-gray-600 p-4 rounded-xl shadow-lg select-none">
-    <h3 className="text-xl mb-3 font-semibold text-white">
-      Спортивные площадки
-    </h3>
-    <ul className="text-white text-base list-disc list-inside">
-      <li>Площадка А — Адрес, 10</li>
-      <li>Площадка Б — Адрес, 25</li>
-    </ul>
-    <button
-      className="mt-4 bg-white text-gray-800 rounded-lg px-5 py-2 font-bold
-                       hover:bg-gray-200 transition"
-    >
-      Добавить площадку
-    </button>
-  </section>
-);
+const SportsFacilities: React.FC = observer(() => {
+  const { spotsStore } = useStores();
+  useEffect(() => {
+    spotsStore.fetchSpots();
+  }, [spotsStore]);
+  if (spotsStore.loading) {
+    return <div className="text-white p-4">Загрузка...</div>;
+  }
+  if (spotsStore.error) {
+    return <div className="text-red-500 p-4">{spotsStore.error}</div>;
+  }
+  if (spotsStore.spots.length === 0) {
+    return (
+      <div className="text-gray-400 p-4">
+        Нет зарегистрированных спортивных площадок
+      </div>
+    );
+  }
+  if (spotsStore.spots.length > 0) {
+    return (
+      <section className="bg-gray-600 p-4 rounded-xl shadow-lg select-none">
+        <h3 className="text-xl mb-3 font-semibold text-white">
+          Спортивные площадки
+        </h3>
+        <ul className="text-white text-base list-disc list-inside">
+          {spotsStore.spots.map((spot, index) => (
+            <li key={index} className="mb-2">
+              <strong>{spot.name}</strong>
+              <br />
+              <p className="mt-3 ml-5">Адрес: {spot.country}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
+});
 
 export default MainPage;

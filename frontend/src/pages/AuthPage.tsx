@@ -97,10 +97,10 @@ export default function AuthPage() {
         <motion.button
           onClick={handleLogin}
           disabled={loading}
-          className={`w-full py-3 rounded-lg transition duration-200 ease-in-out ${
+          className={`w-full py-3 rounded-lg transition duration-200 ease-in-out text-2xl  ${
             loading
-              ? "bg-blue-300 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
+              ? "bg-orange-300 cursor-not-allowed text-white"
+              : "bg-orange-500 hover:bg-orange-600 text-white"
           }`}
           whileHover={!loading ? { scale: 1.05 } : {}}
         >
@@ -109,7 +109,7 @@ export default function AuthPage() {
 
         <motion.button
           onClick={redirectRegister}
-          className="w-full text-blue-500 py-3 mt-4 rounded-lg hover:bg-blue-100 transition duration-200 ease-in-out"
+          className="w-full text-orange-500 py-3 mt-4 rounded-lg hover:bg-blue-100 transition duration-200 ease-in-out"
           whileHover={{ scale: 1.05 }}
         >
           Зарегистрироваться

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useStores } from "../stores/useStores";
 import { observer } from "mobx-react-lite";
@@ -19,7 +19,13 @@ const TeamDetailsPage = observer(() => {
   const { currentTeam, loading, error } = teamsStore;
 
   const handleJoinTeam = async () => {
-    if (teamId && userId) {
+    if (
+      teamId &&
+      userId &&
+      currentTeam?.members.some((member) => member.id === userId)
+    ) {
+      alert("Вы уже в этой команде");
+    } else if (teamId && userId) {
       await teamsStore.joinTeam(teamId, userId);
       await teamsStore.FetchTeamById(teamId); // обновить данные после вступления
     }
@@ -37,7 +43,8 @@ const TeamDetailsPage = observer(() => {
   if (!currentTeam)
     return <div className="text-gray-400 p-4">Команда не найдена</div>;
 
-  const isMember = currentTeam.members.includes(userId || "");
+  const isMember =
+    currentTeam.members.filter((member) => member.id === userId).length > 0;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6">
@@ -59,7 +66,7 @@ const TeamDetailsPage = observer(() => {
           </h2>
           <ul className="list-disc list-inside text-gray-300">
             {currentTeam.members.map((member, index) => (
-              <li key={index}>{member}</li>
+              <li key={index}>{member.username}</li>
             ))}
           </ul>
         </div>

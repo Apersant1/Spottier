@@ -46,7 +46,7 @@ export class MatchesStore {
     }
     return await res.json();
   }
-  async fetchMatches(): MatchCreatePayload[] {
+  async fetchMatches(): Promise<MatchCreatePayload[] | any> {
     this.loading = true;
     this.error = null;
     try {

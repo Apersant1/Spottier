@@ -47,6 +47,14 @@ class SpotsStore {
           Authorization: `Bearer ${this.authStore.access_token}`,
         },
       });
+      if (!response.ok) {
+        sessionStorage.removeItem("access_token");
+        sessionStorage.removeItem("user");
+        this.authStore.access_token = "";
+        this.authStore.user = null;
+        this.authStore.isAuthenticated = false;
+        throw new Error("Ошибка при получении данных");
+      }
       const data: SpotRead[] = await response.json();
 
       if (data) {
@@ -54,6 +62,54 @@ class SpotsStore {
           this.spots = data;
         });
       }
+    } catch (e) {
+      runInAction(() => {
+        this.error = "Ошибка при загрузке данных.";
+      });
+    } finally {
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
+  }
+
+  async translatLatLogToAddress(lat: number, lon: number) {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
+      );
+      if (!response.ok) {
+        throw new Error("Ошибка при получении адреса");
+      }
+      const data = await response.json();
+      return {
+        display_name: data.display_name,
+        address: `${data?.address?.city || ""} ${data?.address?.road || ""} ${
+          data?.address?.house_number || ""
+        }`,
+      };
+    } catch (error) {
+      console.error("Ошибка при получении адреса:", error);
+      return "Неизвестный адрес";
+    }
+  }
+  async addSpot(spot: Spot) {
+    this.loading = true;
+    this.error = null;
+    try {
+      const response = await fetch(`${baseURL}/spots`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authStore.access_token}`,
+        },
+        body: JSON.stringify(spot),
+      });
+      const newSpot: SpotRead = await response.json();
+
+      runInAction(() => {
+        this.spots.push(newSpot);
+      });
     } catch (e) {
       runInAction(() => {
         this.error = "Ошибка при загрузке данных.";

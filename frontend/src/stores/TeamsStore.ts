@@ -1,11 +1,11 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { AuthStore } from "./AuthStore";
+import { AuthStore, IUserRead } from "./AuthStore";
 
 export interface Team {
   name: string;
   desc: string;
   member_count: number;
-  members: string[];
+  members: IUserRead[];
   created_at: Date | string;
 }
 
@@ -65,9 +65,18 @@ class TeamStore {
           Authorization: `Bearer ${this.authStore.access_token}`,
         },
       });
+
+      if (!response.ok) throw new Error("Не удалось получить команду");
+
       const data: TeamRead = await response.json();
+
+      const members = await this.authStore.fetchUsersByIds(data.members);
+
       runInAction(() => {
-        this.currentTeam = data;
+        this.currentTeam = {
+          ...data,
+          members: members,
+        };
       });
     } catch (e) {
       runInAction(() => {

@@ -125,7 +125,7 @@ export const CreateMatchPage = observer(() => {
   );
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6 bg-gray-900 text-white rounded-2xl shadow-lg">
+    <div className="max-w-screen mx-auto p-6 h-screen space-y-6 bg-gray-900 text-white  shadow-lg">
       <h1 className="text-2xl font-bold text-orange-500">Создание матча</h1>
 
       {error && (
@@ -206,7 +206,7 @@ export const CreateMatchPage = observer(() => {
             <label className="text-white">Публичный матч</label>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-10 mt-15">
             <button
               onClick={handleSubmit}
               className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition"

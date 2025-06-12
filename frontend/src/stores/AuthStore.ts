@@ -168,6 +168,31 @@ class AuthStore {
     const updatedData = await response.json();
     this.user = { ...this.user, ...updatedData };
   };
+
+  fetchUsersByIds = async (userIds: IUserRead[]): Promise<IUserRead[]> => {
+    try {
+      const userPromises = userIds.map(async (id) => {
+        const response = await fetch(`${baseURL}/users/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.access_token}`,
+          },
+        });
+        if (!response.ok) {
+          console.warn(`Не удалось загрузить пользователя ${id}`);
+          return null;
+        }
+        return await response.json();
+      });
+
+      const users = await Promise.all(userPromises);
+      return users.filter((u): u is IUserRead => u !== null); // убираем неуспешные
+    } catch (e) {
+      console.error("Ошибка при загрузке пользователей:", e);
+      return [];
+    }
+  };
 }
 
 export { AuthStore };
