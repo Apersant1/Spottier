@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores/useStores";
 import { useParams, useNavigate } from "react-router-dom";
@@ -72,9 +72,9 @@ export const MatchEditPage = observer(() => {
   useEffect(() => {
     async function loadMatch() {
       await matchesStore.fetchMatches();
-      const found = matchesStore.matches.find((m) => m.spot_id === id);
+      const found = matchesStore.matches.find((m) => m.id === id);
       if (found) {
-        setMatch(found);
+        setMatch(found as any);
         setScoreFirst(found.team_first_score);
         setScoreSecond(found.team_second_score);
       }

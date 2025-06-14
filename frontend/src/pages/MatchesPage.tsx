@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores/useStores";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 type Match = {
+  id?: string;
   spot_id: string;
   duration: number;
   team_first_id: string;
@@ -44,6 +45,9 @@ export const MatchListPage = observer(() => {
   }, [currentTeam]);
 
   if (!currentTeam) {
+    setTimeout(() => {
+      navigate("/teams");
+    }, 2000);
     return (
       <div className="p-4 text-center text-red-500">
         Ошибка: текущая команда не выбрана.
@@ -52,7 +56,8 @@ export const MatchListPage = observer(() => {
   }
 
   const onMatchClick = (match: Match) => {
-    navigate(`/matches/edit/${match.spot_id}`);
+    console.log(JSON.stringify(match));
+    navigate(`/matches/edit/${match.id}`);
   };
 
   return (
@@ -87,7 +92,7 @@ export const MatchListPage = observer(() => {
       >
         {matches.map((match) => (
           <motion.li
-            key={match.spot_id}
+            key={match.id}
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 },

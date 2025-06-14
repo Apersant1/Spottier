@@ -8,6 +8,7 @@ export interface Team {
 }
 
 export interface MatchCreatePayload {
+  id?: string;
   spot_id: string;
   duration: number;
   team_first_id: string;
